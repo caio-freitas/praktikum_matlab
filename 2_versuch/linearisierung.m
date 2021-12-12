@@ -3,6 +3,9 @@ function [A_AP1, B_AP1, C_AP1, D_AP1] = linearisierung(f, h, AP)
     x=[phi1, dphi1, phi2, dphi2];
     u=[M];
     
+    f2=solve(f(2),M);
+    M_AP=subs(f2,x,AP);
+    
     conditions=[phi1==AP(1), dphi1==AP(2), phi2==AP(3),dphi2==AP(4)]
     A = jacobian(f, x); 
     B = jacobian(f, u);
@@ -10,6 +13,7 @@ function [A_AP1, B_AP1, C_AP1, D_AP1] = linearisierung(f, h, AP)
     D = jacobian(h, u);
 
     A_AP1 = subs(A,x,AP);
+    A_AP1 = subs(A_AP1 ,M,M_AP);
     B_AP1 = subs(B,x,AP);
     C_AP1 = subs(C,x,AP);
     D_AP1 = subs(D,x,AP);
