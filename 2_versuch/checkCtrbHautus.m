@@ -3,9 +3,10 @@ function checkCtrbHautus(A, B)
     hautus_ctrb = true;
     n = max(size(A));
     eigs = eig(A);
-    MSH = [s*eye(n)-A B];
+    MSH = [s*eye(n)-A B]
     for i=1:max(size(eigs))
-        s=eigs(i);
+        s=eigs(i)
+        rank(subs(MSH))
         if rank(subs(MSH))<n
             hautus_ctrb=false;
         end
