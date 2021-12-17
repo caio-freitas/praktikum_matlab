@@ -4,12 +4,16 @@ function [K, poleRK] = berechneLQR(A, B, Q, R)
 	if size(A,1) ~= size(A,2)
         "A muss quadratisch sein"
         return
+    end
     if size(B,1) ~= size(A,1)
         "A und B mussen die gleiche Anzahl von Zeilen haben"
-    %%% noch anderen?
+        return
+    end
+    %%% noch anderen
     n = size(A,1);
+    p = size(B,2);
 	% Steuerbarkeit
-    sys_steuerbar = rank(ctrb(A,B)==n)
+    sys_steuerbar = (rank(ctrb(A,B))==n)
 
 	% Test auf Symmetrie von Q:
     Q_simetrisch = issymmetric(Q)
@@ -20,7 +24,7 @@ function [K, poleRK] = berechneLQR(A, B, Q, R)
     pd = all(eig_Q>0) & all(eig_R>0)
 	
 	% Reglerberechnung:
-    [K, S, clp] = lqr( ss(A, B, eye(n), zeros(n,n)) , Q, R, zeros(n,n))
+    [K, S, clp] = lqr( ss(A, B, eye(n), zeros(n,p)) , Q, R, zeros(n,p));
     
     % poleRK: Pole geschlossener Regelkreis
 	poleRK = clp
