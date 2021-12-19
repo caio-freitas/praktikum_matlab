@@ -13,20 +13,26 @@ function animierePendel(vT, mX, stPendel, hAxes, makeAvi)
     
     x1   = l1*sin(phi1Interp);
     y1   = -l1*cos(phi1Interp);
-    x2   = l1*sin(phi1Interp) + l2*sin(phi2Interp);
-    y2   = -l1*cos(phi1Interp) + -l2*cos(phi2Interp);
+    x2   = x1 + l2*sin(phi2Interp);
+    y2   = y1 + -l2*cos(phi2Interp);
     
-    p1 = @(i) plot([0 x1(i)],[0 y1(i)],'b-');
-    p2 = @(i) plot([x1(i) x2(i)],[y1(i) y2(i)],'r-');
+    p1 = @(i) plot([0 x1(i)],[0 y1(i)],'b-', linewidth=4);
+    p2 = @(i) plot([x1(i) x2(i)],[y1(i) y2(i)],'r-', linewidth=4);
     
     indexes=[1,size(vTAnim,2)];
 
     figure
+
+
+    if isempty(hAxes)
+        hAxes = [-.5 .5 -.5 .5]; % default value
+    end
+
     axis(hAxes)
     hold on;
     fanimator(p1,'AnimationRange',indexes,'FrameRate',1);
     fanimator(p2,'AnimationRange',indexes,'FrameRate',1);
-    fanimator(@(t) text(-0.1,0.3,"Timer: "+num2str(vTAnim(t),2)+" s"),'AnimationRange',indexes,'FrameRate',1);
+    fanimator(@(t) text(-0.1,0.3,"t = "+num2str(vTAnim(t),2)+" s"),'AnimationRange',indexes,'FrameRate',1);
     
      if exist('makeAvi','var')
         if (makeAvi)
