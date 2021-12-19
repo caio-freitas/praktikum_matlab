@@ -21,12 +21,12 @@ function [K, poleRK] = berechneLQR(A, B, Q, R)
 	% Test auf positive Definitheit:
     eig_Q = eig(Q);
     eig_R = eig(R);
-    pd = all(eig_Q>0) & all(eig_R>0)
+    positive_definiert = all(eig_Q>0) & all(eig_R>0)
 	
 	% Reglerberechnung:
-    [K, S, clp] = lqr( ss(A, B, eye(n), zeros(n,p)) , Q, R);
+    [K, S, clp] = lqr(A, B,Q, R, zeros(size(B,2)));
     
     % poleRK: Pole geschlossener Regelkreis
-	poleRK = clp
+	poleRK = clp;
     % oder einfach poleRK = eig(A-B*K)
 end

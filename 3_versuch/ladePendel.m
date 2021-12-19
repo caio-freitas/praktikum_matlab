@@ -6,5 +6,4 @@ function stPendel = ladePendel()
     stPendel.l2 = 0.2;
     stPendel.Rp1 = 0;
     stPendel.Rp2 = 0;
-    
 end 
