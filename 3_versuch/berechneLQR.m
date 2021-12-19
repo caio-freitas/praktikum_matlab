@@ -24,7 +24,7 @@ function [K, poleRK] = berechneLQR(A, B, Q, R)
     pd = all(eig_Q>0) & all(eig_R>0)
 	
 	% Reglerberechnung:
-    [K, S, clp] = lqr( ss(A, B, eye(n), zeros(n,p)) , Q, R, zeros(n,p));
+    [K, S, clp] = lqr( ss(A, B, eye(n), zeros(n,p)) , Q, R);
     
     % poleRK: Pole geschlossener Regelkreis
 	poleRK = clp
