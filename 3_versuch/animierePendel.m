@@ -1,4 +1,4 @@
-function animierePendel(vT, mX, stPendel, hAxes)
+function animierePendel(vT, mX, stPendel, hAxes, makeAvi)
 	l1 = stPendel.l1;
 	l2 = stPendel.l2;
     
@@ -27,4 +27,9 @@ function animierePendel(vT, mX, stPendel, hAxes)
     fanimator(p1,'AnimationRange',indexes,'FrameRate',1);
     fanimator(p2,'AnimationRange',indexes,'FrameRate',1);
     fanimator(@(t) text(-0.1,0.3,"Timer: "+num2str(vTAnim(t),2)+" s"),'AnimationRange',indexes,'FrameRate',1);
-end 
+    
+     if exist('makeAvi','var')
+        if (makeAvi)
+         writeAnimation('doppelPendel.avi', 'FrameRate',10);
+        end
+    end 
