@@ -5,8 +5,8 @@ function animierePendel(vT, mX, stPendel, hAxes)
     pause = 0.1;
     vTAnim = 0:pause:vT(end);
     
-    phi1 = mX(1,:);
-	phi2 = mX(3,:);
+    phi1 = mX(:,1);
+	phi2 = mX(:,3);
     
     phi1Interp = interp1(phi1,vT,vTAnim);
     phi2Interp = interp1(phi2,vT,vTAnim);
