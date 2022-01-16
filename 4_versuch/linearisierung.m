@@ -18,5 +18,4 @@ function [A_AP1, B_AP1, C_AP1, D_AP1, M_AP] = linearisierung(f, h, AP)
     B_AP1 = double(subs(B,[x,u],[AP,M_AP]));
     C_AP1 = double(subs(C,[x,u],[AP,M_AP]));
     D_AP1 = double(subs(D,[x,u],[AP,M_AP]));
-    
 end
