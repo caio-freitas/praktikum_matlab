@@ -1,9 +1,9 @@
-function animierePendel(vT, mX, stPendel, hAxes, makeAvi)
+function animierePendel(vT, mX, stPendel, appAx, hAxes, video,app)
 	l1 = stPendel.l1;
 	l2 = stPendel.l2;
     
-    pause = 0.1;
-    vTAnim = 0:pause:vT(end);
+    interval = 0.1;
+    vTAnim = 0:interval:vT(end);
     
     phi1 = mX(:,1);
 	phi2 = mX(:,3);
@@ -21,21 +21,35 @@ function animierePendel(vT, mX, stPendel, hAxes, makeAvi)
     
     indexes=[1,size(vTAnim,2)];
 
-    figure
-
-
     if isempty(hAxes)
         hAxes = [-.5 .5 -.5 .5]; % default value
     end
 
-    axis(hAxes)
-    hold on;
-    fanimator(p1,'AnimationRange',indexes,'FrameRate',1);
-    fanimator(p2,'AnimationRange',indexes,'FrameRate',1);
-    fanimator(@(t) text(-0.1,0.3,"t = "+num2str(vTAnim(t),2)+" s"),'AnimationRange',indexes,'FrameRate',1);
+    axis(appAx,hAxes)
+    hold(appAx,'on')
+    title(appAx,'Simulation')
     
-     if exist('makeAvi','var')
-        if (makeAvi)
-         writeAnimation('doppelPendel.avi', 'FrameRate',10);
+    if (not(video))
+        for i=indexes(1):indexes(2)
+            cla(appAx);
+            text(appAx,-0.1,0.3,"t = "+num2str(vTAnim(i),2)+" s");
+            plot(appAx,[0 x1(i)],[0 y1(i)],'b-', linewidth=4);
+            plot(appAx,[x1(i) x2(i)],[y1(i) y2(i)],'r-', linewidth=4);
+            if (app.StopAnimation)
+                break;
+            end
+            pause(0.05)
         end
-    end 
+        
+    else
+        fanimator(appAx,p1,'AnimationRange',indexes,'FrameRate',1);
+        fanimator(appAx,p2,'AnimationRange',indexes,'FrameRate',1);
+        fanimator(appAx,@(t) text(-0.1,0.3,"t = "+num2str(vTAnim(t),2)+" s"),'AnimationRange',indexes,'FrameRate',1);
+        playAnimation(appAx.Parent)
+
+        if exist('video','var')
+            if (video)
+            writeAnimation('doppelPendel.avi', 'FrameRate',10);
+            end
+        end
+    end
