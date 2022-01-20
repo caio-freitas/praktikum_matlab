@@ -1,9 +1,11 @@
 function stTraj = berechneTrajektorie(stPendel, Q, R, T)
+    warning('off','all')
     %  Gibt eine Struktur mit Inhalt Uebergangszeit T, Zeitvektor t,
     %  Zustandsvektor x und Steuerfolge u zurück
     stTraj.T = T;
     stTraj.vT = linspace(0,T,1000);
     tol=1e-10;
+    maxResLimit=1e-3;
     m1 = 0.3;
     m2 = 0.3;
     l1 = 0.2;
@@ -13,7 +15,7 @@ function stTraj = berechneTrajektorie(stPendel, Q, R, T)
     df2du = @(phi1,phi2) 24/(l1^2*(8*m1 + 15*m2 - 9*m2*cos(2*phi1 - 2*phi2)));
     df4du = @(phi1,phi2) -(36*cos(phi1 - phi2))/(l1*l2*(8*m1 + 15*m2 - 9*m2*cos(2*phi1 - 2*phi2)));
     
-    odefun = @(t,x) RandwertproblemDGL(t, x, stPendel, Q, R)
+    odefun = @(t,x) RandwertproblemDGL(t, x, stPendel, Q, R);
     
     solinit.x = [ stTraj.vT];
     solinit.y = [
@@ -25,9 +27,23 @@ function stTraj = berechneTrajektorie(stPendel, Q, R, T)
         zeros(1, 1000);
         zeros(1, 1000);
         zeros(1, 1000)
-        ]
-    %bvpset('RelTol',tol)
-    sol = bvp4c(odefun, @RandwertproblemRB, solinit)
+        ];
+    
+    %args = bvpset('RelTol',tol);
+    args = bvpset();
+    for iter = 1:15
+        nIter=iter;
+        sol = bvp4c(odefun, @RandwertproblemRB, solinit,args);
+        if iter>1
+            if (sol.stats.maxres-maxRes)/maxRes<maxResLimit %break when difference is less than 0.1%
+                break
+            end
+        end
+        maxRes=sol.stats.maxres;
+        solinit.y = sol.y; %next solution to refinate results
+    end
+    disp("Iteractions made: " + nIter)
+    disp("Max residual: " + maxRes)
     
     u=zeros(1,1000);
     for i=1:1000
