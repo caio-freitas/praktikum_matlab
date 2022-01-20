@@ -1,4 +1,5 @@
 function stTraj = berechneTrajektorie(stPendel, Q, R, T)
+    orig_state = warning;
     warning('off','all')
     %  Gibt eine Struktur mit Inhalt Uebergangszeit T, Zeitvektor t,
     %  Zustandsvektor x und Steuerfolge u zurück
@@ -56,5 +57,6 @@ function stTraj = berechneTrajektorie(stPendel, Q, R, T)
     stTraj.vU=u;
     
     stTraj.mX=sol.y(1:4,:);
+    warning(orig_state);
 end
 
