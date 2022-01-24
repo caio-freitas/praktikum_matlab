@@ -31,7 +31,7 @@ function stTraj = berechneTrajektorie(stPendel, Q, R, T)
         ];
     
     %args = bvpset('RelTol',tol);
-    args = bvpset();
+    args = bvpset('RelTol',1.0e-10);
     for iter = 1:15
         nIter=iter;
         sol = bvp4c(odefun, @RandwertproblemRB, solinit,args);
