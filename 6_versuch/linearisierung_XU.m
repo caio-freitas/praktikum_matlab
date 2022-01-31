@@ -10,8 +10,12 @@ function [A, B, C, D] = linearisierung_XU(x_T, u_T)
     Csim = jacobian(h, x);
     Dsim = jacobian(h, u);
 
-    A = double(subs(subs(Asim, x, x_T), u, u_T));
-    B = double(subs(subs(Bsim, x, x_T), u, u_T));
-    C = double(subs(subs(Csim, x, x_T), u, u_T));
-    D = double(subs(subs(Dsim, x, x_T), u, u_T)); 
+    A = (subs(Asim, [x, u],[x_T', u_T']));
+    B = (subs(Bsim, [x, u],[x_T', u_T']));
+    C = (subs(Csim, [x, u],[x_T', u_T']));
+    D = (subs(Dsim, [x, u],[x_T', u_T'])); 
+    A = double(A);
+    B = double(B);
+    C = double(C);
+    D = double(D);
 end
